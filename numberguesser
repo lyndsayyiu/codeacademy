@@ -1,0 +1,31 @@
+let humanScore = 0;
+let computerScore = 0;
+let currentRoundNumber = 1;
+
+// Write your code below:
+//3
+const generateTarget = () => {
+    return Math.floor(Math.random() * 9);  
+};
+//8a
+const getAbsoluteDistance = (guess, target) => {
+  return Math.abs(target - guess);
+};
+//4
+const compareGuesses = (human, computer, target) => {
+  const compUserG = getAbsoluteDistance(human, target);
+  const compCompG = getAbsoluteDistance(computer, target);
+  return compUserG <= compCompG;
+};
+//5
+const updateScore = winner => {
+    if (winner === 'human') {
+        humanScore += 1;
+    } else if (winner === 'computer') {
+        computerScore += 1;
+    }
+};
+//6
+const advanceRound = () => {
+  currentRoundNumber += 1;
+}
