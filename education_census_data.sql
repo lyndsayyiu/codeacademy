@@ -93,4 +93,31 @@ SELECT best_subject, COUNT(state_code)
 FROM state_subject
 GROUP BY best_subject;
 
---try to do without WITH 
+--What is the average proficiency on state assessment exams for each zip code, and how do they compare to other zip codes in the same state?
+
+WITH state_average AS (
+	SELECT 
+		state_code AS 'State',
+		ROUND(AVG(pct_proficient_math),2) AS 'state_avg_math', 
+		ROUND(AVG(pct_proficient_reading),2) AS 'state_avg_reading',
+		MIN(pct_proficient_math) AS 'state_min_math',
+		MIN(pct_proficient_reading) AS 'state_min_reading',
+		MAX(pct_proficient_math) AS 'state_max_math',
+		MAX(pct_proficient_reading) AS 'state_max_reading'
+	FROM public_hs_data
+	GROUP BY 1)
+	
+SELECT 
+	state_average.state, 
+	public_hs_data.zip_code AS 'Zip Code',
+	state_average.state_avg_math AS 'State Maths Average',
+	ROUND(AVG(pct_proficient_math), 2) AS 'Zip Code Maths Average',
+	state_average.state_avg_reading AS 'State Reading Average',
+	ROUND(AVG(pct_proficient_reading), 2) AS 'Zip Code Reading Average'
+FROM public_hs_data
+JOIN state_average
+ON state_average.state = public_hs_data.state_code
+GROUP BY 2;
+
+
+
